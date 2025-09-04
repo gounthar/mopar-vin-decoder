@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [VinHistoryEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun vinHistoryDao(): VinHistoryDao
@@ -23,7 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "mopar_vin_db"
-                ).fallbackToDestructiveMigration().build().also { INSTANCE = it }
+                ).addMigrations(*AppDatabaseMigrations.ALL).build().also { INSTANCE = it }
             }
         }
     }
