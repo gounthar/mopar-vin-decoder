@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MoparVinDecoder</string>
+
+    <!-- Common -->
+    <string name="vin_hint">Enter VIN</string>
+    <string name="decode_button">Decode</string>
+    <string name="scan_button">Scan VIN</string>
+    <string name="history_title">History</string>
+    <string name="results_title">Results</string>
+    <string name="input_title">VIN Input</string>
+    <string name="scanner_title">Scanner</string>
+    <string name="no_results">No results yet</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_camera_preview">Camera preview</string>
+</resources>

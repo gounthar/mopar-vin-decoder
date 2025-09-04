@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/vinInputFragment">
+
+    <fragment
+        android:id="@+id/vinInputFragment"
+        android:name="com.moparvindecoder.ui.input.VinInputFragment"
+        android:label="@string/input_title">
+        <action
+            android:id="@+id/action_vinInputFragment_to_vinResultsFragment"
+            app:destination="@id/vinResultsFragment" />
+        <action
+            android:id="@+id/action_vinInputFragment_to_vinScannerFragment"
+            app:destination="@id/vinScannerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/vinResultsFragment"
+        android:name="com.moparvindecoder.ui.results.VinResultsFragment"
+        android:label="@string/results_title">
+        <argument
+            android:name="vin"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/vinHistoryFragment"
+        android:name="com.moparvindecoder.ui.history.VinHistoryFragment"
+        android:label="@string/history_title" />
+
+    <fragment
+        android:id="@+id/vinScannerFragment"
+        android:name="com.moparvindecoder.ui.scanner.VinScannerFragment"
+        android:label="@string/scanner_title" />
+</navigation>
