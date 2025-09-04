@@ -33,4 +33,6 @@
 
     <!-- Actions -->
     <string name="paste_cd">Paste from clipboard</string>
+    <!-- Errors -->
+    <string name="decode_error_generic">Something went wrong decoding that VIN. Please try again.</string>
 </resources>

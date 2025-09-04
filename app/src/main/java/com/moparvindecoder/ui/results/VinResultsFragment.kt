@@ -14,6 +14,8 @@ import com.moparvindecoder.data.local.AppDatabase
 import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
 import com.moparvindecoder.data.repository.VinRepositoryImpl
 import com.moparvindecoder.domain.usecase.DecodeVinUseCase
+import com.moparvindecoder.BuildConfig
+import com.moparvindecoder.R
 
 class VinResultsFragment : Fragment() {
 
@@ -62,7 +64,11 @@ class VinResultsFragment : Fragment() {
                 is Result.Error -> {
                     binding.resultsContainer.isVisible = false
                     binding.tvError.isVisible = true
-                    binding.tvError.text = "Error: ${result.exception.message ?: "Unknown"}"
+                    binding.tvError.text = if (BuildConfig.DEBUG) {
+                        "Error: ${result.exception.localizedMessage ?: "Unknown"}"
+                    } else {
+                        getString(R.string.decode_error_generic)
+                    }
                 }
             }
         }
