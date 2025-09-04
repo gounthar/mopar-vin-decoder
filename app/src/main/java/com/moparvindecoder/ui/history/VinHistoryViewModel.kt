@@ -1,20 +1,29 @@
 package com.moparvindecoder.ui.history
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
-import com.moparvindecoder.data.local.AppDatabase
 import com.moparvindecoder.data.local.VinHistoryEntity
 import com.moparvindecoder.data.repository.VinHistoryRepository
-import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
 
-class VinHistoryViewModel(app: Application) : AndroidViewModel(app) {
-
-    private val repository: VinHistoryRepository =
-        VinHistoryRepositoryImpl(AppDatabase.get(app).vinHistoryDao())
+class VinHistoryViewModel(
+    private val repository: VinHistoryRepository
+) : ViewModel() {
 
     val history: LiveData<List<VinHistoryEntity>> = repository.observeHistory().asLiveData()
 
     suspend fun clear() = repository.clear()
+}
+
+class VinHistoryViewModelFactory(
+    private val repository: VinHistoryRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VinHistoryViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return VinHistoryViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+    }
 }

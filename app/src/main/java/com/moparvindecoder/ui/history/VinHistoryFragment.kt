@@ -9,13 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.moparvindecoder.databinding.FragmentVinHistoryBinding
+import com.moparvindecoder.data.local.AppDatabase
+import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
 
 class VinHistoryFragment : Fragment() {
 
     private var _binding: FragmentVinHistoryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VinHistoryViewModel by viewModels()
+    private val viewModel: VinHistoryViewModel by viewModels {
+        val appContext = requireContext().applicationContext
+        val repository = VinHistoryRepositoryImpl(AppDatabase.get(appContext).vinHistoryDao())
+        VinHistoryViewModelFactory(repository)
+    }
 
     private lateinit var adapter: VinHistoryAdapter
 
