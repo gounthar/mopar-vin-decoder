@@ -2,23 +2,20 @@ package com.moparvindecoder.ui.results
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.moparvindecoder.data.repository.VinRepositoryImpl
 import com.moparvindecoder.domain.model.VinInfo
 import com.moparvindecoder.domain.usecase.DecodeVinUseCase
-import com.moparvindecoder.data.local.AppDatabase
-import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
+import com.moparvindecoder.data.repository.VinHistoryRepository
 import com.moparvindecoder.data.local.VinHistoryEntity
 import com.moparvindecoder.utils.Result
 import kotlinx.coroutines.launch
 
-class VinResultsViewModel(app: Application) : AndroidViewModel(app) {
-
-    private val repository = VinRepositoryImpl()
-    private val decodeVin = DecodeVinUseCase(repository)
-    private val historyRepo = VinHistoryRepositoryImpl(AppDatabase.get(app).vinHistoryDao())
+class VinResultsViewModel(
+    private val decodeVin: DecodeVinUseCase,
+    private val historyRepo: VinHistoryRepository
+) : ViewModel() {
 
     private val _vinInfo = MutableLiveData<Result<VinInfo>>()
     val vinInfo: LiveData<Result<VinInfo>> get() = _vinInfo
@@ -39,5 +36,18 @@ class VinResultsViewModel(app: Application) : AndroidViewModel(app) {
                 )
             }
         }
+    }
+}
+
+class VinResultsViewModelFactory(
+    private val decodeVin: DecodeVinUseCase,
+    private val historyRepo: VinHistoryRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VinResultsViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return VinResultsViewModel(decodeVin, historyRepo) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 }

@@ -10,13 +10,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.moparvindecoder.databinding.FragmentVinResultsBinding
 import com.moparvindecoder.utils.Result
+import com.moparvindecoder.data.local.AppDatabase
+import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
+import com.moparvindecoder.data.repository.VinRepositoryImpl
+import com.moparvindecoder.domain.usecase.DecodeVinUseCase
 
 class VinResultsFragment : Fragment() {
 
     private var _binding: FragmentVinResultsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VinResultsViewModel by viewModels()
+    private val viewModel: VinResultsViewModel by viewModels {
+        val appContext = requireContext().applicationContext
+        val historyRepo = VinHistoryRepositoryImpl(AppDatabase.get(appContext).vinHistoryDao())
+        val decodeVin = DecodeVinUseCase(VinRepositoryImpl())
+        VinResultsViewModelFactory(decodeVin, historyRepo)
+    }
     private val args: VinResultsFragmentArgs by navArgs()
 
     override fun onCreateView(
