@@ -13,4 +13,24 @@
 
     <!-- Content descriptions -->
     <string name="cd_camera_preview">Camera preview</string>
+    <!-- Results grouping -->
+    <string name="vehicle_group">Vehicle</string>
+    <string name="engine_group">Engine</string>
+    <string name="plant_group">Plant</string>
+    <string name="production_group">Production</string>
+
+    <!-- Labels -->
+    <string name="label_vin">VIN</string>
+    <string name="label_year">Year</string>
+    <string name="label_make">Make</string>
+    <string name="label_model">Model</string>
+    <string name="label_plant">Plant</string>
+    <string name="label_engine">Engine</string>
+    <string name="label_production_seq">Production Seq</string>
+
+    <!-- History -->
+    <string name="history_empty">No history yet</string>
+
+    <!-- Actions -->
+    <string name="paste_cd">Paste from clipboard</string>
 </resources>

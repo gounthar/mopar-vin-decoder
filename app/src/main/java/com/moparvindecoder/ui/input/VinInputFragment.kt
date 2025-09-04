@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.moparvindecoder.databinding.FragmentVinInputBinding
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 
 class VinInputFragment : Fragment() {
 
@@ -32,6 +35,20 @@ class VinInputFragment : Fragment() {
         binding.vinInputEdittext.doAfterTextChanged {
             viewModel.onVinChanged(it?.toString().orEmpty())
             binding.vinInputLayout.error = null
+        }
+
+        binding.vinInputLayout.setEndIconOnClickListener {
+            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val pasted = clipboard.primaryClip?.getItemAt(0)
+                ?.coerceToText(requireContext())
+                ?.toString()
+                ?.uppercase()
+                ?.take(13)
+
+            if (!pasted.isNullOrBlank()) {
+                binding.vinInputEdittext.setText(pasted)
+                binding.vinInputEdittext.setSelection(pasted.length)
+            }
         }
 
         binding.decodeButton.setOnClickListener {

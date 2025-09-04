@@ -6,5 +6,6 @@ data class VinInfo(
     val make: String? = "Mopar",
     val model: String? = null,
     val plant: String? = null,
-    val engine: String? = null
+    val engine: String? = null,
+    val productionSeq: String? = null
 )

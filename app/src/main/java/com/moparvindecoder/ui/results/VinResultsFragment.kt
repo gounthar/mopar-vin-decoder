@@ -32,25 +32,28 @@ class VinResultsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.progressBar.isVisible = true
-        binding.resultText.text = ""
+        binding.tvError.isVisible = false
+        binding.resultsContainer.isVisible = false
 
         viewModel.vinInfo.observe(viewLifecycleOwner) { result ->
             binding.progressBar.isVisible = false
             when (result) {
                 is Result.Success -> {
                     val info = result.data
-                    val text = buildString {
-                        appendLine("VIN: ${info.vin}")
-                        appendLine("Year: ${info.year ?: "-"}")
-                        appendLine("Make: ${info.make ?: "-"}")
-                        appendLine("Model: ${info.model ?: "-"}")
-                        appendLine("Plant: ${info.plant ?: "-"}")
-                        appendLine("Engine: ${info.engine ?: "-"}")
-                    }
-                    binding.resultText.text = text.trim()
+                    binding.tvError.isVisible = false
+                    binding.resultsContainer.isVisible = true
+                    binding.tvVin.text = info.vin
+                    binding.tvYear.text = info.year ?: "-"
+                    binding.tvMake.text = info.make ?: "-"
+                    binding.tvModel.text = info.model ?: "-"
+                    binding.tvEngine.text = info.engine ?: "-"
+                    binding.tvPlant.text = info.plant ?: "-"
+                    binding.tvProductionSeq.text = info.productionSeq ?: "-"
                 }
                 is Result.Error -> {
-                    binding.resultText.text = "Error: ${result.exception.message ?: "Unknown"}"
+                    binding.resultsContainer.isVisible = false
+                    binding.tvError.isVisible = true
+                    binding.tvError.text = "Error: ${result.exception.message ?: "Unknown"}"
                 }
             }
         }

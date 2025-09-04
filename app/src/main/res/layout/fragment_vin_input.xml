@@ -11,12 +11,15 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <com.google.android.material.textfield.TextInputLayout
+<com.google.android.material.textfield.TextInputLayout
             android:id="@+id/vin_input_layout"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/vin_hint"
+            app:endIconMode="custom"
+            app:endIconDrawable="@android:drawable/ic_menu_paste"
+            app:endIconContentDescription="@string/paste_cd"
             app:boxBackgroundMode="outline"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapCharacters|textNoSuggestions"
-                android:maxLength="17"
+                android:maxLength="13"
                 android:importantForAutofill="no" />
         </com.google.android.material.textfield.TextInputLayout>
 

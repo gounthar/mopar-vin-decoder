@@ -1,18 +1,20 @@
 package com.moparvindecoder.ui.history
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.moparvindecoder.data.local.AppDatabase
+import com.moparvindecoder.data.local.VinHistoryEntity
+import com.moparvindecoder.data.repository.VinHistoryRepository
+import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
 
-class VinHistoryViewModel : ViewModel() {
+class VinHistoryViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val _history = MutableLiveData<List<String>>(emptyList())
-    val history: LiveData<List<String>> get() = _history
+    private val repository: VinHistoryRepository =
+        VinHistoryRepositoryImpl(AppDatabase.get(app).vinHistoryDao())
 
-    // Placeholder to add to history; in real app this would persist to DB
-    fun addToHistory(vin: String) {
-        val current = _history.value?.toMutableList() ?: mutableListOf()
-        current.add(0, vin)
-        _history.value = current
-    }
+    val history: LiveData<List<VinHistoryEntity>> = repository.observeHistory().asLiveData()
+
+    suspend fun clear() = repository.clear()
 }
