@@ -1,17 +1,20 @@
 package com.moparvindecoder.ui.input
 
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.moparvindecoder.databinding.FragmentVinInputBinding
-import android.content.ClipboardManager
-import android.content.Context
 import com.google.android.material.snackbar.Snackbar
+import com.moparvindecoder.R
+import com.moparvindecoder.databinding.FragmentVinInputBinding
+import timber.log.Timber
+import java.util.Locale
 
 class VinInputFragment : Fragment() {
 
@@ -39,15 +42,15 @@ class VinInputFragment : Fragment() {
 
         binding.vinInputLayout.setEndIconOnClickListener {
             try {
-                val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+                val clipboard = requireContext().getSystemService<ClipboardManager>()
                 if (clipboard == null) {
-                    showError("Clipboard service not available")
+                    showSnackbar(getString(R.string.error_clipboard_unavailable))
                     return@setEndIconOnClickListener
                 }
 
                 val clipData = clipboard.primaryClip
                 if (clipData == null || clipData.itemCount == 0) {
-                    showError("Clipboard is empty")
+                    showSnackbar(getString(R.string.error_clipboard_empty))
                     return@setEndIconOnClickListener
                 }
 
@@ -55,22 +58,28 @@ class VinInputFragment : Fragment() {
                     ?.coerceToText(requireContext())
                     ?.toString()
                     ?.trim()
-                    ?.uppercase()
+                    ?.uppercase(Locale.US)
                     ?.filter { it.isLetterOrDigit() }
 
                 when {
                     pasted.isNullOrBlank() -> {
-                        showError("No valid text in clipboard")
+                        showSnackbar(getString(R.string.error_clipboard_no_text))
                     }
                     pasted.length < 10 -> {
-                        showError("Clipboard text too short for a valid VIN")
+                        showSnackbar(getString(R.string.error_clipboard_too_short))
+                    }
+                    pasted.length in 11..12 -> {
+                        // Reject 11-12 character VINs as invalid for vintage Mopar
+                        binding.vinInputEdittext.setText(pasted)
+                        binding.vinInputEdittext.setSelection(pasted.length)
+                        binding.vinInputLayout.error = getString(R.string.error_vin_length_invalid, pasted.length)
                     }
                     pasted.length > 13 -> {
                         // Take first 13 characters for vintage Mopar VINs
                         val truncated = pasted.take(13)
                         binding.vinInputEdittext.setText(truncated)
                         binding.vinInputEdittext.setSelection(truncated.length)
-                        showInfo("Pasted and truncated to 13 characters")
+                        showSnackbar(getString(R.string.info_paste_truncated))
                     }
                     else -> {
                         binding.vinInputEdittext.setText(pasted)
@@ -78,16 +87,18 @@ class VinInputFragment : Fragment() {
                     }
                 }
             } catch (e: SecurityException) {
-                showError("Permission denied to access clipboard")
+                Timber.e(e, "Security exception accessing clipboard")
+                showSnackbar(getString(R.string.error_clipboard_permission))
             } catch (e: Exception) {
-                showError("Failed to paste from clipboard")
+                Timber.e(e, "Failed to paste from clipboard")
+                showSnackbar(getString(R.string.error_clipboard_failed))
             }
         }
 
         binding.decodeButton.setOnClickListener {
             val vin = binding.vinInputEdittext.text?.toString()?.trim().orEmpty()
             if (vin.isEmpty()) {
-                binding.vinInputLayout.error = "VIN is required"
+                binding.vinInputLayout.error = getString(R.string.error_vin_required)
                 return@setOnClickListener
             }
             val action = VinInputFragmentDirections.actionVinInputFragmentToVinResultsFragment(vin)
@@ -100,11 +111,7 @@ class VinInputFragment : Fragment() {
         }
     }
 
-    private fun showError(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun showInfo(message: String) {
+    private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 

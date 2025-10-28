@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/vin_hint"
             app:endIconMode="custom"
-            app:endIconDrawable="@android:drawable/ic_menu_edit"
+            app:endIconDrawable="@android:drawable/ic_menu_set_as"
             app:endIconContentDescription="@string/paste_cd"
             app:boxBackgroundMode="outline"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +42,7 @@
             app:layout_constraintTop_toBottomOf="@id/vin_input_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/scan_button"
-            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontalChainStyle="packed"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp" />
 
