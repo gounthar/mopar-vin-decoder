@@ -6,7 +6,7 @@
     "entities": [
       {
         "tableName": "vin_history",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `vin` TEXT NOT NULL, `year` TEXT, `make` TEXT, `model` TEXT, `timestamp` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `vin` TEXT NOT NULL COLLATE NOCASE, `year` TEXT, `make` TEXT, `model` TEXT, `timestamp` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -18,7 +18,8 @@
             "fieldPath": "vin",
             "columnName": "vin",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": true,
+            "collate": "NOCASE"
           },
           {
             "fieldPath": "year",
@@ -59,7 +60,7 @@
               "vin"
             ],
             "orders": [],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_vin_history_vin` ON `${TABLE_NAME}` (`vin`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_vin_history_vin` ON `${TABLE_NAME}` (`vin` COLLATE NOCASE)"
           }
         ],
         "foreignKeys": []

@@ -5,7 +5,7 @@ An Android application for decoding vintage Mopar (Chrysler, Dodge, Plymouth) Ve
 ## Features
 
 - **Camera Scanning**: Use your device's camera to scan VIN barcodes
-- **Manual Entry**: Type VIN numbers directly with real-time validation
+- **Manual Entry**: Type VINs directly with real-time validation
 - **Historical Data**: View previously decoded VINs stored locally
 - **Detailed Results**: Get comprehensive vehicle information including make, model, year, engine, and more
 

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.moparvindecoder.databinding.FragmentVinInputBinding
 import android.content.ClipboardManager
 import android.content.Context
+import com.google.android.material.snackbar.Snackbar
 
 class VinInputFragment : Fragment() {
 
@@ -37,16 +38,49 @@ class VinInputFragment : Fragment() {
         }
 
         binding.vinInputLayout.setEndIconOnClickListener {
-            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val pasted = clipboard.primaryClip?.getItemAt(0)
-                ?.coerceToText(requireContext())
-                ?.toString()
-                ?.uppercase()
-                ?.take(13)
+            try {
+                val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+                if (clipboard == null) {
+                    showError("Clipboard service not available")
+                    return@setEndIconOnClickListener
+                }
 
-            if (!pasted.isNullOrBlank()) {
-                binding.vinInputEdittext.setText(pasted)
-                binding.vinInputEdittext.setSelection(pasted.length)
+                val clipData = clipboard.primaryClip
+                if (clipData == null || clipData.itemCount == 0) {
+                    showError("Clipboard is empty")
+                    return@setEndIconOnClickListener
+                }
+
+                val pasted = clipData.getItemAt(0)
+                    ?.coerceToText(requireContext())
+                    ?.toString()
+                    ?.trim()
+                    ?.uppercase()
+                    ?.filter { it.isLetterOrDigit() }
+
+                when {
+                    pasted.isNullOrBlank() -> {
+                        showError("No valid text in clipboard")
+                    }
+                    pasted.length < 10 -> {
+                        showError("Clipboard text too short for a valid VIN")
+                    }
+                    pasted.length > 13 -> {
+                        // Take first 13 characters for vintage Mopar VINs
+                        val truncated = pasted.take(13)
+                        binding.vinInputEdittext.setText(truncated)
+                        binding.vinInputEdittext.setSelection(truncated.length)
+                        showInfo("Pasted and truncated to 13 characters")
+                    }
+                    else -> {
+                        binding.vinInputEdittext.setText(pasted)
+                        binding.vinInputEdittext.setSelection(pasted.length)
+                    }
+                }
+            } catch (e: SecurityException) {
+                showError("Permission denied to access clipboard")
+            } catch (e: Exception) {
+                showError("Failed to paste from clipboard")
             }
         }
 
@@ -64,6 +98,14 @@ class VinInputFragment : Fragment() {
             val action = VinInputFragmentDirections.actionVinInputFragmentToVinScannerFragment()
             findNavController().navigate(action)
         }
+    }
+
+    private fun showError(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun showInfo(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
