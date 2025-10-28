@@ -14,6 +14,8 @@ import com.moparvindecoder.data.local.AppDatabase
 import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
 import com.moparvindecoder.data.repository.VinRepositoryImpl
 import com.moparvindecoder.domain.usecase.DecodeVinUseCase
+import android.content.pm.ApplicationInfo
+import com.moparvindecoder.R
 
 class VinResultsFragment : Fragment() {
 
@@ -62,7 +64,12 @@ class VinResultsFragment : Fragment() {
                 is Result.Error -> {
                     binding.resultsContainer.isVisible = false
                     binding.tvError.isVisible = true
-                    binding.tvError.text = "Error: ${result.exception.message ?: "Unknown"}"
+                    val isDebuggable = (requireContext().applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+                    binding.tvError.text = if (isDebuggable) {
+                        "Error: ${result.exception.localizedMessage ?: "Unknown"}"
+                    } else {
+                        getString(R.string.decode_error_generic)
+                    }
                 }
             }
         }

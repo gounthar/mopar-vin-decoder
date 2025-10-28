@@ -26,11 +26,23 @@
     <string name="label_model">Model</string>
     <string name="label_plant">Plant</string>
     <string name="label_engine">Engine</string>
-    <string name="label_production_seq">Production Seq</string>
+    <string name="label_production_seq">Production Sequence</string>
 
     <!-- History -->
     <string name="history_empty">No history yet</string>
 
     <!-- Actions -->
     <string name="paste_cd">Paste from clipboard</string>
+
+    <!-- Errors and Messages -->
+    <string name="decode_error_generic">Something went wrong decoding that VIN. Please try again.</string>
+    <string name="error_clipboard_unavailable">Clipboard service not available</string>
+    <string name="error_clipboard_empty">Clipboard is empty</string>
+    <string name="error_clipboard_no_text">No valid text in clipboard</string>
+    <string name="error_clipboard_too_short">Clipboard text too short for a valid VIN</string>
+    <string name="error_clipboard_permission">Permission denied to access clipboard</string>
+    <string name="error_clipboard_failed">Failed to paste from clipboard</string>
+    <string name="error_vin_required">VIN is required</string>
+    <string name="error_vin_length_invalid">VIN must be 10 or 13 characters (found %d characters)</string>
+    <string name="info_paste_truncated">Pasted and truncated to 13 characters</string>
 </resources>

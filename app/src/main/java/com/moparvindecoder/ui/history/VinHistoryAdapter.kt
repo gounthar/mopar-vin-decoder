@@ -12,6 +12,11 @@ class VinHistoryAdapter(
     private val onItemClick: (VinHistoryEntity) -> Unit
 ) : ListAdapter<VinHistoryEntity, VinHistoryAdapter.Vh>(Diff) {
 
+    init {
+        // Enable stable IDs for better performance
+        setHasStableIds(true)
+    }
+
     object Diff : DiffUtil.ItemCallback<VinHistoryEntity>() {
         override fun areItemsTheSame(oldItem: VinHistoryEntity, newItem: VinHistoryEntity): Boolean {
             // vin is unique (indexed)
@@ -25,14 +30,23 @@ class VinHistoryAdapter(
 
     inner class Vh(private val binding: ItemVinHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            // Move click listener to init block for better performance
+            itemView.setOnClickListener {
+                val position = bindingAdapterPosition
+                // Guard against invalid positions
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClick(getItem(position))
+                }
+            }
+        }
+
         fun bind(item: VinHistoryEntity) {
             binding.tvVin.text = item.vin
             val year = item.year ?: "-"
             val make = item.make ?: "-"
             val model = item.model ?: "-"
             binding.tvYearMakeModel.text = listOf(year, make, model).joinToString(" ")
-
-            itemView.setOnClickListener { onItemClick(item) }
         }
     }
 
@@ -43,5 +57,10 @@ class VinHistoryAdapter(
 
     override fun onBindViewHolder(holder: Vh, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun getItemId(position: Int): Long {
+        // Use VIN hashCode as stable ID
+        return getItem(position).vin.hashCode().toLong()
     }
 }

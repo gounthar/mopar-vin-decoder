@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.moparvindecoder.data.local.VinHistoryEntity
 import com.moparvindecoder.data.repository.VinHistoryRepository
+import kotlinx.coroutines.launch
 
 class VinHistoryViewModel(
     private val repository: VinHistoryRepository
@@ -13,7 +15,9 @@ class VinHistoryViewModel(
 
     val history: LiveData<List<VinHistoryEntity>> = repository.observeHistory().asLiveData()
 
-    suspend fun clear() = repository.clear()
+    fun clear() = viewModelScope.launch {
+        repository.clear()
+    }
 }
 
 class VinHistoryViewModelFactory(

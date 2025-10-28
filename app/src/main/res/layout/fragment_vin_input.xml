@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/vin_hint"
             app:endIconMode="custom"
-            app:endIconDrawable="@android:drawable/ic_menu_paste"
+            app:endIconDrawable="@android:drawable/ic_menu_set_as"
             app:endIconContentDescription="@string/paste_cd"
             app:boxBackgroundMode="outline"
             app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +36,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/decode_button"
-            style="@style/Widget.Material3.Button.Filled"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/decode_button"
@@ -49,7 +48,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/scan_button"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/scan_button"
