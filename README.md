@@ -16,7 +16,7 @@ An Android application for decoding vintage Mopar (Chrysler, Dodge, Plymouth) Ve
 
 ## Requirements
 
-- Android 5.0 (API level 21) or higher
+- Android 6.0 (API level 23) or higher
 - Camera permission for barcode scanning
 
 ## Development
@@ -25,8 +25,9 @@ An Android application for decoding vintage Mopar (Chrysler, Dodge, Plymouth) Ve
 
 - **JDK**: Eclipse Adoptium JDK 21
 - **Gradle**: 8.7 (uses wrapper)
-- **Min SDK**: 21
-- **Target SDK**: 34
+- **Min SDK**: 23 (Android 6.0)
+- **Compile SDK**: 35 (Android 15)
+- **Target SDK**: 35 (Android 15)
 
 ### Build Commands
 
