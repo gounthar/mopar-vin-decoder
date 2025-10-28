@@ -42,7 +42,12 @@ class VinHistoryFragment : Fragment() {
                 VinHistoryFragmentDirections.actionVinHistoryFragmentToVinResultsFragment(entity.vin)
             findNavController().navigate(action)
         }
-        binding.recyclerHistory.adapter = adapter
+
+        // Configure RecyclerView for better performance
+        binding.recyclerHistory.apply {
+            setHasFixedSize(true)
+            adapter = this@VinHistoryFragment.adapter
+        }
 
         viewModel.history.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
@@ -52,6 +57,8 @@ class VinHistoryFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // Clear adapter to prevent memory leaks
+        binding.recyclerHistory.adapter = null
         _binding = null
     }
 }

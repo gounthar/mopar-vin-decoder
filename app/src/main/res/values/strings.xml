@@ -26,7 +26,7 @@
     <string name="label_model">Model</string>
     <string name="label_plant">Plant</string>
     <string name="label_engine">Engine</string>
-    <string name="label_production_seq">Production Seq</string>
+    <string name="label_production_seq">Production Sequence</string>
 
     <!-- History -->
     <string name="history_empty">No history yet</string>

@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
 data class VinHistoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
-    @ColumnInfo(name = "vin")
+    @ColumnInfo(name = "vin", collate = ColumnInfo.NOCASE)
     val vin: String,
     @ColumnInfo(name = "year")
     val year: String? = null,

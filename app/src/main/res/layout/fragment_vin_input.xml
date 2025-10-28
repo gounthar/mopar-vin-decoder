@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/vin_hint"
             app:endIconMode="clear_text"
+            app:endIconContentDescription="@string/paste_cd"
             app:boxBackgroundMode="outline"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

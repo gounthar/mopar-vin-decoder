@@ -10,7 +10,10 @@ import com.moparvindecoder.domain.usecase.DecodeVinUseCase
 import com.moparvindecoder.data.repository.VinHistoryRepository
 import com.moparvindecoder.data.local.VinHistoryEntity
 import com.moparvindecoder.utils.Result
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class VinResultsViewModel(
     private val decodeVin: DecodeVinUseCase,
@@ -26,14 +29,22 @@ class VinResultsViewModel(
             _vinInfo.value = res
             if (res is Result.Success) {
                 val info = res.data
-                historyRepo.upsert(
-                    VinHistoryEntity(
-                        vin = info.vin,
-                        year = info.year,
-                        make = info.make,
-                        model = info.model
-                    )
-                )
+                try {
+                    // Explicitly use IO dispatcher for database operations
+                    withContext(Dispatchers.IO) {
+                        historyRepo.upsert(
+                            VinHistoryEntity(
+                                vin = info.vin,
+                                year = info.year,
+                                make = info.make,
+                                model = info.model
+                            )
+                        )
+                    }
+                } catch (e: Exception) {
+                    // Non-fatal error: log but don't crash the app
+                    Timber.e(e, "Failed to save VIN to history")
+                }
             }
         }
     }

@@ -26,6 +26,7 @@
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:gravity="center"
         android:padding="24dp"
+        android:accessibilityLiveRegion="polite"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
