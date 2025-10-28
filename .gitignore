@@ -41,6 +41,7 @@ outputs/
 *.log
 hs_err_pid*
 replay_pid*
+.kotlin/
 
 # OS files
 .DS_Store
@@ -59,3 +60,10 @@ yarn-error.log*
 # Misc
 .gradle/
 .idea/
+
+# User instructions (keep local)
+CLAUDE.md
+CONTEXT.md
+
+# Environment files
+.env
