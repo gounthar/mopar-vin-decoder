@@ -10,13 +10,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.moparvindecoder.databinding.FragmentVinResultsBinding
 import com.moparvindecoder.utils.Result
+import com.moparvindecoder.data.local.AppDatabase
+import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
+import com.moparvindecoder.data.repository.VinRepositoryImpl
+import com.moparvindecoder.domain.usecase.DecodeVinUseCase
 
 class VinResultsFragment : Fragment() {
 
     private var _binding: FragmentVinResultsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VinResultsViewModel by viewModels()
+    private val viewModel: VinResultsViewModel by viewModels {
+        val appContext = requireContext().applicationContext
+        val historyRepo = VinHistoryRepositoryImpl(AppDatabase.get(appContext).vinHistoryDao())
+        val decodeVin = DecodeVinUseCase(VinRepositoryImpl())
+        VinResultsViewModelFactory(decodeVin, historyRepo)
+    }
     private val args: VinResultsFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -32,25 +41,28 @@ class VinResultsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.progressBar.isVisible = true
-        binding.resultText.text = ""
+        binding.tvError.isVisible = false
+        binding.resultsContainer.isVisible = false
 
         viewModel.vinInfo.observe(viewLifecycleOwner) { result ->
             binding.progressBar.isVisible = false
             when (result) {
                 is Result.Success -> {
                     val info = result.data
-                    val text = buildString {
-                        appendLine("VIN: ${info.vin}")
-                        appendLine("Year: ${info.year ?: "-"}")
-                        appendLine("Make: ${info.make ?: "-"}")
-                        appendLine("Model: ${info.model ?: "-"}")
-                        appendLine("Plant: ${info.plant ?: "-"}")
-                        appendLine("Engine: ${info.engine ?: "-"}")
-                    }
-                    binding.resultText.text = text.trim()
+                    binding.tvError.isVisible = false
+                    binding.resultsContainer.isVisible = true
+                    binding.tvVin.text = info.vin
+                    binding.tvYear.text = info.year ?: "-"
+                    binding.tvMake.text = info.make ?: "-"
+                    binding.tvModel.text = info.model ?: "-"
+                    binding.tvEngine.text = info.engine ?: "-"
+                    binding.tvPlant.text = info.plant ?: "-"
+                    binding.tvProductionSeq.text = info.productionSeq ?: "-"
                 }
                 is Result.Error -> {
-                    binding.resultText.text = "Error: ${result.exception.message ?: "Unknown"}"
+                    binding.resultsContainer.isVisible = false
+                    binding.tvError.isVisible = true
+                    binding.tvError.text = "Error: ${result.exception.message ?: "Unknown"}"
                 }
             }
         }

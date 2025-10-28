@@ -4,16 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.moparvindecoder.databinding.FragmentVinHistoryBinding
+import com.moparvindecoder.data.local.AppDatabase
+import com.moparvindecoder.data.repository.VinHistoryRepositoryImpl
 
 class VinHistoryFragment : Fragment() {
 
     private var _binding: FragmentVinHistoryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VinHistoryViewModel by viewModels()
+    private val viewModel: VinHistoryViewModel by viewModels {
+        val appContext = requireContext().applicationContext
+        val repository = VinHistoryRepositoryImpl(AppDatabase.get(appContext).vinHistoryDao())
+        VinHistoryViewModelFactory(repository)
+    }
+
+    private lateinit var adapter: VinHistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,13 +37,16 @@ class VinHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Placeholder observer to show simple history text list
+        adapter = VinHistoryAdapter { entity ->
+            val action =
+                VinHistoryFragmentDirections.actionVinHistoryFragmentToVinResultsFragment(entity.vin)
+            findNavController().navigate(action)
+        }
+        binding.recyclerHistory.adapter = adapter
+
         viewModel.history.observe(viewLifecycleOwner) { list ->
-            binding.historyText.text = if (list.isEmpty()) {
-                "No history yet"
-            } else {
-                list.joinToString(separator = "\n")
-            }
+            adapter.submitList(list)
+            binding.emptyView.isVisible = list.isEmpty()
         }
     }
 

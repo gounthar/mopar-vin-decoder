@@ -28,7 +28,11 @@
     <fragment
         android:id="@+id/vinHistoryFragment"
         android:name="com.moparvindecoder.ui.history.VinHistoryFragment"
-        android:label="@string/history_title" />
+        android:label="@string/history_title">
+        <action
+            android:id="@+id/action_vinHistoryFragment_to_vinResultsFragment"
+            app:destination="@id/vinResultsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/vinScannerFragment"

@@ -21,7 +21,8 @@ class VinRepositoryImpl : VinRepository {
                     make = decoded.make,
                     model = decoded.model,
                     plant = decoded.assemblyPlant,
-                    engine = decoded.engine
+                    engine = decoded.engine,
+                    productionSeq = decoded.productionSeq
                 )
             )
         } catch (e: Exception) {
