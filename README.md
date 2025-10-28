@@ -26,7 +26,7 @@ An Android application for decoding vintage Mopar (Chrysler, Dodge, Plymouth) Ve
 - **JDK**: Eclipse Adoptium JDK 21
 - **Gradle**: 8.7 (uses wrapper)
 - **Min SDK**: 23 (Android 6.0)
-- **Compile SDK**: 35 (Android 15)
+- **Compile SDK**: 36 (Android 16)
 - **Target SDK**: 35 (Android 15)
 
 ### Build Commands

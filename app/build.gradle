@@ -15,7 +15,7 @@ kapt {
 
 android {
     namespace "com.moparvindecoder"
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.moparvindecoder"

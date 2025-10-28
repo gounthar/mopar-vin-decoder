@@ -94,7 +94,7 @@ MoparVinDecoder is an Android application that decodes vintage Mopar (Chrysler, 
 - JDK 21 (Eclipse Adoptium) - Note: Project uses JVM target 17 for compatibility
 - Gradle 8.7 (wrapper included)
 - Min SDK 23 (Android 6.0)
-- Compile SDK 35 (Android 15)
+- Compile SDK 36 (Android 16)
 - Target SDK 35 (Android 15)
 - KAPT for Room annotation processing
 
